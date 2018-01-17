@@ -145,6 +145,17 @@ This is a more involved example showing a few new concepts. First off, subscribe
 
 Now, before we go further, using `subscribe` is probably something you won't use if you're using a tool like React as we have custom bindings for React (and soon other frameworks/libraries) that simplify this process drastically and make subscribing to changes more intuitive, so don't worry too much if this is a bit confusing right now, it will get simpler very soon.
 
+#### Unsubscribing
+
+Sometimes you will want to unsubscribe from a listener (for example, when a component is unmounted from the DOM). To do that, just store a references to the listener and call `unsubscribe` on it:
+
+```js
+const listener = state.subscribe('name', name => console.log('Name is:', name))
+listener.unsubscribe()
+```
+
+This will cleanup the listener so it is no longer called.
+
 ### Actions
 
 Now that we've seen how to do basic mutations and subscribing to changes, the next major concept to understand is actions. Actions are just simple JavaScript functions that mutate state, for example:
@@ -275,47 +286,9 @@ ReactDOM.render(
 )
 ```
 
-### `<Connect>`
-
-The `Connect` component wraps a React component and provides state and actions to the component. The `Connect` component is never used directly but instead is used by the `connect` higher-order component.
-
-```js
-class Connect extends Component {
-  componentWillMount() {
-    this.context.state.subscribe(
-      this.props
-    )
-  }
-
-  componentWillUnmount() {
-    this.context.state.unsubscribe(
-
-    )
-  }
-￼
-
-  render() {
-    return <Component {...this.props} />
-  }
-}
-
-Connect.contextTypes = {
-  state: PropTypes.object
-}
-```
-
 ### `connect()`
 
 The `connect` higher-order component wraps a React component with the `Connect` component that provides state and actions to the component.
-
-```js
-function connect(propGetter, Component) {
-  const props = propGetter()
-  return <Connect Component={Component} {...props} />
-}
-```
-
-Usage:
 
 ```js
 connect(
