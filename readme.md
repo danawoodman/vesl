@@ -18,6 +18,14 @@
 * **Helpful debugging tools**: A modern and capable browser extension with history rollback, detailed event logging and much more. Helpful error messages in development guide you to what is wrong and how to fix it. All the tools the modern developer expects.
 * **Flexible**: Designed to be easy to pick and choose only the features you need.
 
+## Installation
+
+**NOTE: THIS IS NOT A REAL LIBRARY YET, THIS IS A PLACEHOLDER**
+
+```bash
+npm i -S vesl
+```
+
 ## High-Level Overview
 
 At it's core, Vesl is just two things:

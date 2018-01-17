@@ -1,0 +1,35 @@
+{
+  "name": "vesl",
+  "version": "0.0.1",
+  "description": "A simple, intuitive state container.",
+  "main": "lib/vesl.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danawoodman/vesl.git"
+  },
+  "keywords": [
+    "state",
+    "mobx",
+    "redux",
+    "react",
+    "vue",
+    "angular",
+    "store",
+    "actions",
+    "events",
+    "storage",
+    "component"
+  ],
+  "author": "Dana Woodman <dana@danawoodman.com> (http://danawoodman.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danawoodman/vesl/issues"
+  },
+  "homepage": "https://github.com/danawoodman/vesl#readme"
+}
