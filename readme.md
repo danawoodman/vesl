@@ -173,6 +173,64 @@ At first the state can just be a simple object definition but as the app grows, 
 
 State is updated via actions which trigger a mutation event. This event directly modified the object in place so changes are efficient. Since they mutate state, components subscribe to state changes of the part of the tree they care about.
 
+### Computed Properties
+
+Create derived state which components can subscribe to. If any dependent values for the computed property change, the property re-evaluates and thus re-renders any listening components.
+
+```js
+import { createState } from 'vesl'
+
+const initial = {
+  people: [
+    { id: 1, name: 'Mary', lovesCats: true },
+    { id: 1, name: 'Mary', lovesCats: true },
+  ],
+}
+
+const computed = {
+  count: {
+    listen: 'people',
+    compute: people => people.length,
+  },
+
+  // Computed properties can take arguments which they can
+  // use to create the computed state.
+  friends: {
+    listen: id => ['people', id],
+    compute: (people, id) => people.filter(p => id === p.id),
+  },
+
+  // Computed state can depend on other computed state:
+  besties: {
+    listen: id => [`friends(${id})`],
+    compute: friends => friends.filter(f => f.lovesCats),
+  },
+}
+
+const state = createState(initial, computed)
+```
+
+Now, to access the computed properties, you call them like functions:
+
+```js
+state.subscribe('count()', count => console.log('People count:', count))
+state.subscribe('friends(1)', friends =>
+  console.log('Friends are now:', friends)
+)
+state.subscribe('besties(1)', besties =>
+  console.log('Besties are now:', besties)
+)
+```
+
+If the computed property does not take any parameters, you can safely omit the parens:
+
+```js
+state.get('count()')
+state.get('count')
+```
+
+These are both treated the same.
+
 ### `state.subscribe`
 
 ```js
@@ -269,47 +327,6 @@ connect(
   TagList
 )
 ```
-
-### `state.computed`
-
-Create derived state which components can subscribe to. If any dependent values for the computed property change, the property re-evaluates and thus re-renders any listening components.
-
-```js
-state.computed({
-  friends: {
-    listen(props) {
-      return {
-        people: 'people',
-        id: props.id,
-      }
-    },
-    compute({ id, people }) {
-      return people.filter(p => id === p.id)
-    },
-  },
-
-  // Computed state can depend on
-  // other computed state:
-  besties: {
-    listen(props) {
-      return {
-        friends: `friends(${props.id})`,
-      }
-    },
-    compute({ friends }) {
-      return friends.filter(f => f.lovesCats)
-    },
-  },
-})
-```
-
-If you call a computed part of state without the function parameters, you will see a helpful error message explaining the issue. In production we automatically call it with no parameters to prevent a runtime exception. Eg;
-
-```js
-state.get('besties')
-```
-
-Will throw an error in development saying you need to add parens `()` to the call.
 
 ## Middleware
 
