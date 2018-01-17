@@ -61,19 +61,21 @@ First off, you can do simple actions with the state like adding and updating val
 
 ```js
 state.push('todos', { title: 'Try out Vesl', done: false })
-state.set('todos.2.done', true)
-state.get('todos.2') // { title: 'Try out Vesl', done: true }
+state.set('todos[2].done', true)
+state.get('todos[2]') // { title: 'Try out Vesl', done: true }
 ```
 
 As you can see here, we are first adding a new item to the `todos` list with the `push` method. This method behaves exactly how JavaScript's `Array.push()` method behaves so you don't need to learn any new concepts when working with data in Vesl.
 
-Next, you'll notice an interesting syntax for getting one of the `todos` by it's array index: `todos.2.done`. What this translates to is `todos[2].done`, so these are conceptiually equivilent:
+Next, you'll notice an interesting syntax for getting one of the `todos` by it's array index: `todos.2.done`. These are conceptually equivalent:
 
 ```js
-state.set('todos.2.done', true)
+state.set('todos[2].done', true)
 
 state.todos[2].done = true
 ```
+
+_Note: This method of accessing data within an object is referred to as "dot path" retrieval._
 
 Now, you may be wondering why we do this instead of just directly modifying the object. The main reason for this approach is that it makes watching for changes to your application state easy for Vesl to track and, thus, update your application only where necessary. If we just mutated the state object, we wouldn't know what happened without doing tricky things like using `Object.observe`, or other more complex approaches.
 
