@@ -371,21 +371,21 @@ Given the state:
 
 ```js
 {
-  users: [{ name: 'Bill', interests: ['travel', 'coding'] }]
+  interests: ['travel', 'coding']
 }
 ```
 
 Calling:
 
 ```js
-state.concat(`users[0].interests`, ['Vesl'])
+state.concat('interests', ['Vesl'])
 ```
 
 Fires event:
 
 ```js
 {
-  path: 'users[0].interests',
+  path: 'interests',
   method: 'concat',
   data: ['Vesl']
 }
@@ -395,7 +395,7 @@ Which changes state to:
 
 ```js
 {
-  users: [{ name: 'Bill', interests: ['travel', 'coding', 'Vesl'] }]
+  interests: ['travel', 'coding', 'Vesl']
 }
 ```
 
