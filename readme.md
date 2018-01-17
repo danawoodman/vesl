@@ -313,19 +313,7 @@ Will throw an error in development saying you need to add parens `()` to the cal
 
 ## Middleware
 
-## Notes
-
-Situations to address:
-
-* Managing async actions
-* Triggering series of actions
-* Pure re-rendering of components
-* Middleware-like behavior wrapping actions or state changes
-* Easy to work with any library but designed for React
-* State change navigation history
-* Undo behavior should be easy
-* Needs a devtools extension to explore and change state
-* Creating (and depending on) computed state should be simple
+_Coming soon... maybe..._
 
 ---
 
