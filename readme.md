@@ -22,8 +22,26 @@
 
 At it's core, Vesl is just two things:
 
-1. **State**: Represented as a simple JavaScript object
-2. **Actions**: Functions that change (mutate) state
+1. **State**: Represented as a simple JavaScript object which things like components can be subscribed to changes.
+2. **Actions**: Functions that change (mutate) state or call other actions.
+
+We will go into these two core concepts but for the impatient, here is what a very simple Vesl application could look like:
+
+```js
+import { createState } from 'vesl'
+
+const state = createState({ title: 'Vesl is awesome' })
+
+state.subscribe('title', title => console.log('Title is now:', title))
+
+state.set('title', 'Vesl rocks!')
+```
+
+If you run this, you will see "Title is now: Vesl rocks!" logged to the console. This shows the core concepts including creating a state (simple object), subscribing to changes to a partical part of the state and then updating the state (which triggers the subscriber function to get called).
+
+This is about as simple as you can get with Vesl but of course this isn't too useful yet, so keep reading!
+
+### State
 
 Vesl provides a simple abstraction over changing state that allows for the features above, without forcing you to learn any advanced concepts (reducers, dispatchers, observables, immutablility, etc).
 
@@ -67,11 +85,11 @@ state.get('todos[2]') // { title: 'Try out Vesl', done: true }
 
 As you can see here, we are first adding a new item to the `todos` list with the `push` method. This method behaves exactly how JavaScript's `Array.push()` method behaves so you don't need to learn any new concepts when working with data in Vesl.
 
-Next, you'll notice an interesting syntax for getting one of the `todos` by it's array index: `todos.2.done`. These are conceptually equivalent:
+Next, you'll notice an interesting syntax for getting one of the `todos` by it's array index: `todos[2].done`. This is basically a string version of the syntax you're already used to when working with JavScript objects. So, these are conceptually equivalent:
 
 ```js
 state.set('todos[2].done', true)
-
+// Conceptually equivalent to:
 state.todos[2].done = true
 ```
 
@@ -81,6 +99,49 @@ Now, you may be wondering why we do this instead of just directly modifying the 
 
 An additional benefit to this is that now we can get immutable-like features in our app without having to use tools like Immutable.js which have a steep learning curve and require lots of changes to your application to implement. With Vesl, we get the real benefits of immutability like shallow comparisons, while technically not being purely immutable. If you're interested in learning more about this, please read further down where we discuss how state works in Vesl.
 
+#### Subscribing to changes
+
+Now, this isn't all that useful yet if you can't react to changes. This is where subscribing to changes comes in. In it's simplest form, you can subscribe to particular piece of the state object:
+
+```js
+state.subscribe('title', title => console.log(title))
+```
+
+Now, if you call something like:
+
+```js
+state.set('title', 'Hello world!')
+```
+
+You will see Vesl log "Hello world!" to the console. This is showing a shorthand version of subscribing to simple parts of the state tree. If, however, you want to subscribe to more than one part of the tree, you have that option as well:
+
+```js
+state.subscribe(
+  ['name', 'posts[0].title', 'friends(2)'], // subscriptions
+  (name, recentPostTitle, friends) => {
+    console.log(
+      `${name} has ${
+        friends.length
+      } friends and his most recent post was called "${recentPostTitle}`
+    )
+  }
+)
+```
+
+This is a more involved example showing a few new concepts. First off, subscribe can take an array of positions on the state tree that you want to listen to. The first one is `name` which is just simply finds the key "name" at the root of your state tree. The second value uses "dot notation" to access the post with the array index `0` just like you would normally do in JavaScript. The third item is what is called a "Computed Property" which is a way to create a computed (or derived) state from your application. We won't go over this too much just yet, the important takeaway is that it returns a value just like the other paths we say before. You can read further down to learn more about computed properties.
+
+Now, before we go further, using `subscribe` is probably something you won't use if you're using a tool like React as we have custom bindings for React (and soon other frameworks/libraries) that simplify this process drastically and make subscribing to changes more intuitive, so don't worry too much if this is a bit confusing right now, it will get simpler very soon.
+
+### Actions
+
+Now that we've seen how to do basic mutations and subscribing to changes, the next major concept to understand is actions. Actions are just simple JavaScript functions that mutate state, for example:
+
+```js
+function addTodo(todo) {
+  state.push('todos', todo)
+}
+```
+
 ## Event System
 
 Actions are just functions. Pass actions into components and components fire actions. Components know nothing about what the action is or where it came from.
@@ -89,7 +150,7 @@ Actions are typically just simple functions that trigger state change and can op
 
 An action can mutate state (without a reducer) which triggers a re-render of any components dependent on that particular state.
 
-Actions create an internal payload that can be inspected based only on the state that changes. This payload includes the path that was mutated, the type of mutation and any values passed in. These actions scan be 'played back' like you can with Redux actions but without having to implement a dispatcher. The dispatcher is in fact the state updating mechanism itself and is invest less to you, unless you don’t want it to be (ala devtools etc).
+Actions create an internal payload that can be inspected based only on the state that changes. This payload includes the path that was mutated, the type of mutation and any values passed in. These actions scan be 'played back' like you can with Redux actions but without having to implement a dispatcher. The dispatcher is in fact the state updating mechanism itself and invisible to you, unless you don’t want it to be (e.g. devtools etc).
 
 ### `state.set`
 
