@@ -1,19 +1,22 @@
-# State Manager
+# Vesl
 
-## Broad Goals
+> A state container you'll love using.
 
-Be the simplest and most intuitive state management solution in existence. Leverage ES6/7 features. Make adding in state and actions as easy as possible by leveraging convention. Be flexible and allow conventions to be violated if needed. Should work in non-DOM based environments. All components should be supremely testable without pain. Ease of use is more important then programming purity. Performance is important but not the most critical factor. Immutable-like behavior without the pain (or even thinking about it). Explicitness and clarity are critical.
+**This is very much a conceptual tool right now and is just a place to brainstorm, check back later**
 
-Very explicit and clear errors should be throw for things like accessing parts of the state that don’t exist.
+## Vision
 
-## Components
-
-Leverage the huge and powerful ecosystem of React. Strive for pure functions when/where possible. Wrap components in higher order components which provide actions and state.
-
-These higher order components allow for two things:
-
-1. Passing in actions
-2. Subscribing to state
+* **Simple**: The primary goal of Vesl is to be the simplest possible state container for dynamic JavaScript applications. Minimal boilerplate, convention over configuration.
+* **Single state tree**: All application data lives in one JavaScript object which represents state.
+* **Immutable-ish**: State is mutated with special helpers and subscribers listen to changes to the location on the tree and not the values so you get immutable-like features without all the fuss.
+* **Library friendly**: Designed to be library agnostic so it can work with React, Angular, Vue, vanilla JS or any library of the future.
+* **Computed data**: A simple, functional way to create computed values that can be listened to like any other value.
+* **Univeral**: Works on any browser (from IE 6 and up), mobile, desktop, IoT or anywhere else.
+* **Performant**: Because of it's functional nature and immutable-like behavior, you get performance for free. Subscribed components only update when the part of the state they care about changes.
+* **Testable**: Actions are simple functions, state is a plain object which makes testing Vesl code simple.
+* **Modern**: Written to take advantage of ES6/7/Next features to make Vesl code clear and concise.
+* **Helpful debugging tools**: A modern and capable browser extension with history rollback, detailed event logging and much more. Helpful error messages in development guide you to what is wrong and how to fix it. All the tools the modern developer expects.
+* **Flexible**: Designed to be easy to pick and choose only the features you need.
 
 ## Event System
 
@@ -164,6 +167,15 @@ state.subscribe(`users.${props.id}.name`, () => console.log('name changed!'))
 
 With React, this is used in a higher order component to trigger an intelligent re-render:
 
+## Components
+
+Leverage the huge and powerful ecosystem of React. Strive for pure functions when/where possible. Wrap components in higher order components which provide actions and state.
+
+These higher order components allow for two things:
+
+1. Passing in actions
+2. Subscribing to state
+
 ### `<StateProvider>`
 
 The `StateProvider` component wraps your React application and provides access to your state when using the `Connect` component. It uses `context` which allows passing down data all the way through the React component tree. This context is only created so that `Connect` has access to the application state.
@@ -306,3 +318,11 @@ Existing Solutions
 * Redux
 * MobX
 * cerebral.
+
+## The Name
+
+Pronounced: _Vessel (/ˈvesəl/)_
+
+Meaning: _a hollow container, especially one used to hold liquid, such as a bowl or cask._
+
+The first letter in Vesl is capitalized and never all lower or uppercase.
