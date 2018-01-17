@@ -30,10 +30,13 @@ We will go into these two core concepts but for the impatient, here is what a ve
 ```js
 import { createState } from 'vesl'
 
+// Create your state object
 const state = createState({ title: 'Vesl is awesome' })
 
+// Listen for changes to the "title" key in your state
 state.subscribe('title', title => console.log('Title is now:', title))
 
+// Change the title, which triggers the subscriber above
 state.set('title', 'Vesl rocks!')
 ```
 
