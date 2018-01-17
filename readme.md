@@ -333,33 +333,69 @@ Situations to address:
 
 ## `state.set`
 
+Given the state:
+
 ```js
-state.set(`users.${props.id}.name`, 'John')
+{
+  users: [{ name: 'Bill' }]
+}
+```
+
+Calling:
+
+```js
+state.set('users[0].name', 'John')
 ```
 
 Fires event:
 
 ```js
 {
-  path: 'users.1.name',
+  path: 'users[0].name',
   method: 'set',
   data: 'John'
 }
 ```
 
-## `state.concat`
+Which changes state to:
 
 ```js
-state.concat(`users.${props.id}.interests`, ['travel', 'coding'])
+{
+  users: [{ name: 'John' }]
+}
+```
+
+## `state.concat`
+
+Given the state:
+
+```js
+{
+  users: [{ name: 'Bill', interests: ['travel', 'coding'] }]
+}
+```
+
+Calling:
+
+```js
+state.concat(`users[0].interests`, ['Vesl'])
 ```
 
 Fires event:
 
 ```js
 {
-  path: 'users.1.interests',
+  path: 'users[0].interests',
   method: 'concat',
-  data: [ 'travel', 'coding' ]
+  data: ['Vesl']
+}
+```
+
+Which changes state to:
+
+```js
+{
+  users: [{ name: 'Bill', interests: ['travel', 'coding', 'Vesl'] }]
 }
 ```
 
