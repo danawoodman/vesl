@@ -18,6 +18,67 @@
 * **Helpful debugging tools**: A modern and capable browser extension with history rollback, detailed event logging and much more. Helpful error messages in development guide you to what is wrong and how to fix it. All the tools the modern developer expects.
 * **Flexible**: Designed to be easy to pick and choose only the features you need.
 
+## High-Level Overview
+
+At it's core, Vesl is just two things:
+
+1. **State**: Represented as a simple JavaScript object
+2. **Actions**: Functions that change (mutate) state
+
+Vesl provides a simple abstraction over changing state that allows for the features above, without forcing you to learn any advanced concepts (reducers, dispatchers, observables, immutablility, etc).
+
+With Vesl, you create an initial state that is a simple object and then you create actions that change that state. For example, let's say this is your application's initial state:
+
+```js
+const state = {
+  todos: [
+    { title: 'Get milk', done: false },
+    { title: 'Take out trash', done: true },
+  ],
+}
+```
+
+This state could be loaded from a database or fetched from an API, but we will go over all that later.
+
+Now, to hook this state up to Vesl, you just wrap your state object with the `createState` function:
+
+```js
+import { createState } from 'vesl'
+
+const state = createState({
+  todos: [
+    { title: 'Get milk', done: false },
+    { title: 'Take out trash', done: true },
+  ],
+})
+```
+
+The `createState` method is where all the magic happens. Under the covers, it wraps your state object in a collection of methods that you can use to get and update state, subscribe to changes and a lot more.
+
+Ok, so now that we have our state object, let's do something useful with it.
+
+First off, you can do simple actions with the state like adding and updating values:
+
+```js
+state.push('todos', { title: 'Try out Vesl', done: false })
+state.set('todos.2.done', true)
+state.get('todos.2') // { title: 'Try out Vesl', done: true }
+```
+
+As you can see here, we are first adding a new item to the `todos` list with the `push` method. This method behaves exactly how JavaScript's `Array.push()` method behaves so you don't need to learn any new concepts when working with data in Vesl.
+
+Next, you'll notice an interesting syntax for getting one of the `todos` by it's array index: `todos.2.done`. What this translates to is `todos[2].done`, so these are conceptiually equivilent:
+
+```js
+state.set('todos.2.done', true)
+
+state.todos[2].done = true
+```
+
+Now, you may be wondering why we do this instead of just directly modifying the object. The main reason for this approach is that it makes watching for changes to your application state easy for Vesl to track and, thus, update your application only where necessary. If we just mutated the state object, we wouldn't know what happened without doing tricky things like using `Object.observe`, or other more complex approaches.
+
+An additional benefit to this is that now we can get immutable-like features in our app without having to use tools like Immutable.js which have a steep learning curve and require lots of changes to your application to implement. With Vesl, we get the real benefits of immutability like shallow comparisons, while technically not being purely immutable. If you're interested in learning more about this, please read further down where we discuss how state works in Vesl.
+
 ## Event System
 
 Actions are just functions. Pass actions into components and components fire actions. Components know nothing about what the action is or where it came from.
