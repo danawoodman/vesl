@@ -337,21 +337,21 @@ Given the state:
 
 ```js
 {
-  users: [{ name: 'Bill' }]
+  name: 'Bill'
 }
 ```
 
 Calling:
 
 ```js
-state.set('users[0].name', 'John')
+state.set('name', 'John')
 ```
 
 Fires event:
 
 ```js
 {
-  path: 'users[0].name',
+  path: 'name',
   method: 'set',
   data: 'John'
 }
@@ -361,7 +361,7 @@ Which changes state to:
 
 ```js
 {
-  users: [{ name: 'John' }]
+  name: 'John'
 }
 ```
 
