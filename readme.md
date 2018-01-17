@@ -327,15 +327,15 @@ Existing Solutions
 
 ---
 
-## API
+# API
 
-### `state.set`
+## `state.set`
 
 ```js
 state.set(`users.${props.id}.name`, 'John')
 ```
 
-Results in:
+Fires event:
 
 ```js
 {
@@ -345,13 +345,13 @@ Results in:
 }
 ```
 
-### `state.concat`
+## `state.concat`
 
 ```js
 state.concat(`users.${props.id}.interests`, ['travel', 'coding'])
 ```
 
-Results in:
+Fires event:
 
 ```js
 {
@@ -361,7 +361,7 @@ Results in:
 }
 ```
 
-### `state.merge`
+## `state.merge`
 
 Given the state:
 
@@ -379,7 +379,7 @@ Calling:
 state.merge('colors', { red: '#f00' })
 ```
 
-Results in:
+Fires event:
 
 ```js
 {
@@ -389,13 +389,13 @@ Results in:
 }
 ```
 
-New state:
+Which changes state to:
 
 ```js
 { colors: { blue: '#00f', red: '#f00' } }
 ```
 
-### `state.splice`
+## `state.splice`
 
 Given the state:
 
@@ -416,7 +416,7 @@ state.splice(
 )
 ```
 
-Results in:
+Fires event:
 
 ```js
 {
@@ -427,7 +427,7 @@ Results in:
 }
 ```
 
-New state:
+Which changes state to:
 
 ```js
 {
@@ -437,7 +437,7 @@ New state:
 
 Methods: set, push, unshift, merge, concat, splice, pop (all reasonable array and object methods)
 
-### `state.trigger`
+## `state.trigger`
 
 You can replay events with the internal 'trigger' method:
 
