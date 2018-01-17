@@ -40,7 +40,7 @@ state.subscribe('title', title => console.log('Title is now:', title))
 state.set('title', 'Vesl rocks!')
 ```
 
-If you run this, you will see "Title is now: Vesl rocks!" logged to the console. This shows the core concepts including creating a state (simple object), subscribing to changes to a partical part of the state and then updating the state (which triggers the subscriber function to get called).
+If you run this, you will see "Title is now: Vesl rocks!" logged to the console. This shows the core concepts including creating a state object, subscribing to changes to a partical part of the state and then updating the state (which triggers the subscriber function to get called).
 
 This is about as simple as you can get with Vesl but of course this isn't too useful yet, so keep reading!
 
@@ -75,6 +75,8 @@ const state = createState({
 ```
 
 The `createState` method is where all the magic happens. Under the covers, it wraps your state object in a collection of methods that you can use to get and update state, subscribe to changes and a lot more.
+
+#### Updating and retrieving state
 
 Ok, so now that we have our state object, let's do something useful with it.
 
