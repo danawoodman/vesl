@@ -40,7 +40,7 @@ state.subscribe('title', title => console.log('Title is now:', title))
 state.set('title', 'Vesl rocks!')
 ```
 
-If you run this, you will see "Title is now: Vesl rocks!" logged to the console. This shows the core concepts including creating a state object, subscribing to changes to a partical part of the state and then updating the state (which triggers the subscriber function to get called).
+If you run this, you will see "Title is now: Vesl rocks!" logged to the console. This shows the core concepts including creating a state object, subscribing to changes to a particular part of the state and then updating the state (which triggers the subscriber function to get called).
 
 This is about as simple as you can get with Vesl but of course this isn't too useful yet, so keep reading!
 
@@ -80,7 +80,7 @@ The `createState` method is where all the magic happens. Under the covers, it wr
 
 Ok, so now that we have our state object, let's do something useful with it.
 
-First off, you can do simple actions with the state like adding and updating values:
+First off, you can make simple changes to the state like adding and updating values:
 
 ```js
 state.push('todos', { title: 'Try out Vesl', done: false })
@@ -133,7 +133,7 @@ state.subscribe(
 )
 ```
 
-This is a more involved example showing a few new concepts. First off, subscribe can take an array of positions on the state tree that you want to listen to. The first one is `name` which is just simply finds the key "name" at the root of your state tree. The second value uses "dot notation" to access the post with the array index `0` just like you would normally do in JavaScript. The third item is what is called a "Computed Property" which is a way to create a computed (or derived) state from your application. We won't go over this too much just yet, the important takeaway is that it returns a value just like the other paths we say before. You can read further down to learn more about computed properties.
+This is a more involved example showing a few new concepts. First off, subscribe can take an array of positions on the state tree that you want to listen to. The first one is `name` which just simply finds the key "name" at the root of your state tree. The second value uses "dot notation" to access the post with the array index `0` just like you would normally do in JavaScript. The third item is what is called a "Computed Property" which is a way to create a computed (or derived) value form your state. We won't go over this too much just yet; the important takeaway is that it returns a value just like the other paths we saw before. You can [read further down][computed] to learn more about computed properties.
 
 Now, before we go further, using `subscribe` is probably something you won't use if you're using a tool like React as we have custom bindings for React (and soon other frameworks/libraries) that simplify this process drastically and make subscribing to changes more intuitive, so don't worry too much if this is a bit confusing right now, it will get simpler very soon.
 
@@ -156,129 +156,6 @@ Actions are typically just simple functions that trigger state change and can op
 An action can mutate state (without a reducer) which triggers a re-render of any components dependent on that particular state.
 
 Actions create an internal payload that can be inspected based only on the state that changes. This payload includes the path that was mutated, the type of mutation and any values passed in. These actions scan be 'played back' like you can with Redux actions but without having to implement a dispatcher. The dispatcher is in fact the state updating mechanism itself and invisible to you, unless you don’t want it to be (e.g. devtools etc).
-
-### `state.set`
-
-```js
-state.set(`users.${props.id}.name`, 'John')
-```
-
-Results in:
-
-```js
-{
-  path: 'users.1.name',
-  method: 'set',
-  data: 'John'
-}
-```
-
-### `state.concat`
-
-```js
-state.concat(`users.${props.id}.interests`, ['travel', 'coding'])
-```
-
-Results in:
-
-```js
-{
-  path: 'users.1.interests',
-  method: 'concat',
-  data: [ 'travel', 'coding' ]
-}
-```
-
-### `state.merge`
-
-Given the state:
-
-```js
-{
-  colors: {
-    blue: '#00f'
-  }
-}
-```
-
-Calling:
-
-```js
-state.merge('colors', { red: '#f00' })
-```
-
-Results in:
-
-```js
-{
-  path: 'colors',
-  method: 'merge',
-  data: { red: '#f00' }
-}
-```
-
-New state:
-
-```js
-{ colors: { blue: '#00f', red: '#f00' } }
-```
-
-### `state.splice`
-
-Given the state:
-
-```js
-{
-  tags: ['a', 'b']
-}
-```
-
-Calling:
-
-```js
-state.splice(
-  'tags',
-  1, // index
-  0, // delete count
-  'z'
-)
-```
-
-Results in:
-
-```js
-{
-  path: 'tags',
-  method: 'merge',
-  data: { red: '#f00' },
-  args: [ 1, 0 ]
-}
-```
-
-New state:
-
-```js
-{
-  tags: ['a', 'z', 'b']
-}
-```
-
-Methods: set, push, unshift, merge, concat, splice, pop (all reasonable array and object methods)
-
-### Replaying events
-
-You can replay events with the internal 'trigger' method:
-
-```js
-const event = {
-  path: 'users.1.name',
-  method: 'set',
-  data: 'John',
-}
-state.trigger(event)
-```
-
-This is just the underlying implementation of the event helper methods which are just syntax sugar.
 
 ## State Management
 
@@ -448,6 +325,135 @@ Existing Solutions
 * MobX
 * cerebral.
 
+---
+
+## API
+
+### `state.set`
+
+```js
+state.set(`users.${props.id}.name`, 'John')
+```
+
+Results in:
+
+```js
+{
+  path: 'users.1.name',
+  method: 'set',
+  data: 'John'
+}
+```
+
+### `state.concat`
+
+```js
+state.concat(`users.${props.id}.interests`, ['travel', 'coding'])
+```
+
+Results in:
+
+```js
+{
+  path: 'users.1.interests',
+  method: 'concat',
+  data: [ 'travel', 'coding' ]
+}
+```
+
+### `state.merge`
+
+Given the state:
+
+```js
+{
+  colors: {
+    blue: '#00f'
+  }
+}
+```
+
+Calling:
+
+```js
+state.merge('colors', { red: '#f00' })
+```
+
+Results in:
+
+```js
+{
+  path: 'colors',
+  method: 'merge',
+  data: { red: '#f00' }
+}
+```
+
+New state:
+
+```js
+{ colors: { blue: '#00f', red: '#f00' } }
+```
+
+### `state.splice`
+
+Given the state:
+
+```js
+{
+  tags: ['a', 'b']
+}
+```
+
+Calling:
+
+```js
+state.splice(
+  'tags',
+  1, // index
+  0, // delete count
+  'z'
+)
+```
+
+Results in:
+
+```js
+{
+  path: 'tags',
+  method: 'merge',
+  data: { red: '#f00' },
+  args: [ 1, 0 ]
+}
+```
+
+New state:
+
+```js
+{
+  tags: ['a', 'z', 'b']
+}
+```
+
+Methods: set, push, unshift, merge, concat, splice, pop (all reasonable array and object methods)
+
+### `state.trigger`
+
+You can replay events with the internal 'trigger' method:
+
+```js
+const event = {
+  path: 'users.1.name',
+  method: 'set',
+  data: 'John',
+}
+state.trigger(event)
+```
+
+This is just the underlying implementation of the event helper methods which are just syntax sugar.
+
+---
+
 ## The Name
 
 Pronounced: _Vessel (/ˈvesəl/)_
@@ -455,3 +461,13 @@ Pronounced: _Vessel (/ˈvesəl/)_
 Meaning: _a hollow container, especially one used to hold liquid, such as a bowl or cask._
 
 The first letter in Vesl is capitalized and never all lower or uppercase.
+
+[computed]: /#computed-properties
+
+## Credits
+
+Copyright Dana Woodman &copy; 2018.
+
+## License
+
+MIT
