@@ -319,12 +319,6 @@ Situations to address:
 * Needs a devtools extension to explore and change state
 * Creating (and depending on) computed state should be simple
 
-Existing Solutions
-
-* Redux
-* MobX
-* cerebral.
-
 ---
 
 # API
@@ -450,7 +444,7 @@ const event = {
 state.trigger(event)
 ```
 
-This is just the underlying implementation of the event helper methods which are just syntax sugar.
+This is just the underlying implementation of the event helper methods which are just syntax sugar. This is only really useful for things like the Vesl devtools extension.
 
 ---
 
@@ -467,6 +461,12 @@ The first letter in Vesl is capitalized and never all lower or uppercase.
 ## Credits
 
 Copyright Dana Woodman &copy; 2018.
+
+Many ideas were borrowed (stolen?) from other great tools, including:
+
+* Redux
+* MobX
+* cerebral.
 
 ## License
 
